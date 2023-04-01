@@ -149,7 +149,7 @@ function getGeoCoords(searchQuery) {
 function changeData(data) {
     changeWeatherInfo(data);
     changeWeatherForecastInfo(data);
-    updateChart(data, false);
+    try { updateChart(data, false) } catch (error) { console.error("There is a problem with chart.js CDNs"); }
     updateWeatherMap(map);
     changeWeatherVideo(data);
     changeAdditionalWeatherInfo(data);
