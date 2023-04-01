@@ -204,11 +204,12 @@ function changeWeatherForecastInfo(data) {
         document.querySelector('#forecast-day-degree-weekday-' + i).innerHTML = epochToJsDate(data.list[datesArrIndexes[i - 1]].dt).toLocaleDateString('us', { weekday: 'long' });
     }
 
-
-    const precipitation_chart_button = document.querySelector("#precipitation-chart-button");
-    precipitation_chart_button.addEventListener("click", () => updateChart(data, true));
-    const temperature_chart_button = document.querySelector("#temperature-chart-button");
-    temperature_chart_button.addEventListener("click", () => { updateChart(data, false); });
+    try {
+        const precipitation_chart_button = document.querySelector("#precipitation-chart-button");
+        precipitation_chart_button.addEventListener("click", () => updateChart(data, true));
+        const temperature_chart_button = document.querySelector("#temperature-chart-button");
+        temperature_chart_button.addEventListener("click", () => { updateChart(data, false); });
+    } catch (error) { console.error("There is a CDN error") };
 
 }
 
