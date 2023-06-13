@@ -1,0 +1,21 @@
+{
+	"name": "weather-app by rudy282",
+	"short_name": "weather-app",
+	"start_url": "index.html",
+	"scope": "./",
+	"icons": [
+	  {
+		"src": "contract.png",
+		"sizes": "640x640",
+		"type": "image/png"
+	  },
+	  {
+		"src": "contract.png",
+		"sizes": "640x640",
+		"type": "image/png"
+	  }
+	],
+	"theme_color": "#ffd31d",
+	"background_color": "#333",
+	"display": "standalone"
+  }

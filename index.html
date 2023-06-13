@@ -1,201 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>weather-app</title>
+		<link rel="icon" type="image/x-icon" href="img/favico.ico" />
+		<link rel="stylesheet" href="style.css" />
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+			integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+			crossorigin="" />
+		<link rel="manifest" href="manifest.json" />
+		<script
+			src="https://kit.fontawesome.com/7668b8b36b.js"
+			crossorigin="anonymous"></script>
+		<script
+			src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+			integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+			crossorigin=""></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>weather-app</title>
-    <link rel="icon" type="image/x-icon" href="img/favico.ico">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <script src="https://kit.fontawesome.com/7668b8b36b.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+		<script src="script.js" defer></script>
+	</head>
 
-    <script src="script.js" defer></script>
-</head>
+	<body>
+		<div id="video">
+			<video autoplay muted loop plays-inline id="video-clouds">
+				<source src="vid/clouds.mp4" type="video/mp4" />
+			</video>
+			<video autoplay muted loop plays-inline id="video-rain">
+				<source src="vid/rain.mp4" type="video/mp4" />
+			</video>
+			<video autoplay muted loop plays-inline id="video-snow">
+				<source src="vid/snow.mp4" type="video/mp4" />
+			</video>
+			<video autoplay muted loop plays-inline id="video-sun">
+				<source src="vid/sun.mp4" type="video/mp4" />
+			</video>
+		</div>
 
-<body>
+		<div id="container">
+			<div id="weather">
+				<div>
+					<div id="degrees">
+						<span id="degrees-data">30</span>&#176;
+					</div>
+				</div>
+				<div id="weather-image-container">
+					<img src="#" id="weather-image" alt="weather" />
+				</div>
+				<div>
+					<div id="weather-type">
+						<span id="weather-type-data">Partially cloudy</span>
+					</div>
+					<div id="weather-additional">
+						<div id="city">
+							<i class="fa-solid fa-location-dot"></i>
+							<span id="city-data">Warsaw</span>
+						</div>
+						<div id="wind">
+							<i class="fa-solid fa-wind"></i>
+							<span id="wind-data">30</span>km/h
+						</div>
+						<div id="humidity">
+							<i class="fa-solid fa-droplet"></i>
+							<span id="humidity-data">90</span>%
+						</div>
+						<div id="precipitation">
+							<i class="fa-solid fa-cloud-showers-heavy"></i>
+							<span id="precipitation-data">10</span>%
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <div id="video">
-        <video autoplay muted loop plays-inline id="video-clouds">
-            <source src="vid/clouds.mp4" type="video/mp4">
-        </video>
-        <video autoplay muted loop plays-inline id="video-rain">
-            <source src="vid/rain.mp4" type="video/mp4">
-        </video>
-        <video autoplay muted loop plays-inline id="video-snow">
-            <source src="vid/snow.mp4" type="video/mp4">
-        </video>
-        <video autoplay muted loop plays-inline id="video-sun">
-            <source src="vid/sun.mp4" type="video/mp4">
-        </video>
-    </div>
+			<div id="info">
+				<div id="search-bar">
+					<form id="search-form">
+						<input
+							type="text"
+							name="search"
+							id="search"
+							placeholder="Search for location..." />
+						<button type="submit" id="search-button">
+							<i class="fa-solid fa-magnifying-glass"></i>
+						</button>
+						<button id="add-button">
+							<i class="fa-solid fa-circle-plus"></i>
+						</button>
+					</form>
+				</div>
 
+				<div class="separator"></div>
 
-    <div id="container">
+				<div id="city-list">
+					<div
+						class="list-element"
+						id="list-element-current-location">
+						<span>Current location</span>
+					</div>
+				</div>
 
-        <div id="weather">
-            <div>
-                <div id="degrees"><span id="degrees-data">30</span>&#176;</div>
-            </div>
-            <div id="weather-image-container">
-                <img src="#" id="weather-image" alt="weather">
-            </div>
-            <div>
-                <div id="weather-type"><span id="weather-type-data">Partially cloudy</span></div>
-                <div id="weather-additional">
-                    <div id="city"><i class="fa-solid fa-location-dot"></i> <span id="city-data">Warsaw</span></div>
-                    <div id="wind"><i class="fa-solid fa-wind"></i> <span id="wind-data">30</span>km/h</div>
-                    <div id="humidity"><i class="fa-solid fa-droplet"></i> <span id="humidity-data">90</span>%</div>
-                    <div id="precipitation"><i class="fa-solid fa-cloud-showers-heavy"></i> <span
-                            id="precipitation-data">10</span>%</div>
-                </div>
-            </div>
+				<div class="separator"></div>
 
-        </div>
+				<div id="graph">
+					<div id="graph_interface">
+						<div>
+							<button id="temperature-chart-button">
+								<i
+									class="fa-solid fa-temperature-three-quarters"></i>
+							</button>
+						</div>
+						<div>
+							<button id="precipitation-chart-button">
+								<i class="fa-solid fa-cloud-showers-heavy"></i>
+							</button>
+						</div>
+					</div>
+					<div id="chart">
+						<canvas id="chart-canvas"></canvas>
+					</div>
+				</div>
 
-        <div id="info">
-            <div id="search-bar">
-                <form id="search-form">
-                    <input type="text" name="search" id="search" placeholder="Search for location...">
-                    <button type="submit" id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button id="add-button"><i class="fa-solid fa-circle-plus"></i></button>
-                </form>
-            </div>
+				<div class="separator"></div>
 
-            <div class="separator"></div>
+				<div id="additional-info">
+					<div class="additional-info-row">
+						<div>
+							<i
+								class="fa-solid fa-temperature-three-quarters"></i>
+							Feels like:
+							<span id="additional-info-feels-like">-30</span
+							>&#176;
+						</div>
+						<div>
+							<i class="fa-solid fa-compress"></i> Pressure:
+							<span id="additional-info-pressure">1025</span>hPa
+						</div>
+						<div>
+							<i class="fa-solid fa-cloud"></i> Clouds:
+							<span id="additional-info-clouds">100</span>%
+						</div>
+					</div>
+					<div class="additional-info-row">
+						<div>
+							<i class="fa-solid fa-eye"></i> Visibility:
+							<span id="additional-info-visibility">10000km</span>
+						</div>
+						<div>
+							<i class="fa-regular fa-sun"></i> Sunrise:
+							<span id="additional-info-sunrise">06:00</span>
+						</div>
+						<div>
+							<i class="fa-solid fa-sun"></i> Sunset:
+							<span id="additional-info-sunset">20:00</span>
+						</div>
+					</div>
+				</div>
 
-            <div id="city-list">
-                <div class="list-element" id="list-element-current-location"><span>Current location</span></div>
-            </div>
+				<div class="separator"></div>
 
-            <div class="separator"></div>
+				<div id="forecast">
+					<div class="forecast-day">
+						<img
+							src="#"
+							id="forecast-day-img-1"
+							class="forecast-day-img"
+							alt="weather" />
+						<div
+							id="forecast-day-degree-1"
+							class="forecast-day-degree">
+							<span id="forecast-day-degree-data-1">20</span
+							><span id="forecast-day-degree-weekday-1"
+								>Monday</span
+							>
+						</div>
+					</div>
+					<div class="forecast-day">
+						<img
+							src="#"
+							id="forecast-day-img-2"
+							class="forecast-day-img"
+							alt="weather" />
+						<div
+							id="forecast-day-degree-1"
+							class="forecast-day-degree">
+							<span id="forecast-day-degree-data-2">20</span
+							><span id="forecast-day-degree-weekday-2"
+								>Tuesday</span
+							>
+						</div>
+					</div>
+					<div class="forecast-day">
+						<img
+							src="#"
+							id="forecast-day-img-3"
+							class="forecast-day-img"
+							alt="weather" />
+						<div
+							id="forecast-day-degree-1"
+							class="forecast-day-degree">
+							<span id="forecast-day-degree-data-3">20</span
+							><span id="forecast-day-degree-weekday-3"
+								>Wednesday</span
+							>
+						</div>
+					</div>
+					<div class="forecast-day">
+						<img
+							src="#"
+							id="forecast-day-img-4"
+							class="forecast-day-img"
+							alt="weather" />
+						<div
+							id="forecast-day-degree-1"
+							class="forecast-day-degree">
+							<span id="forecast-day-degree-data-4">20</span
+							><span id="forecast-day-degree-weekday-4"
+								>Thursday</span
+							>
+						</div>
+					</div>
+					<div class="forecast-day">
+						<img
+							src="#"
+							id="forecast-day-img-5"
+							class="forecast-day-img"
+							alt="weather" />
+						<div
+							id="forecast-day-degree-1"
+							class="forecast-day-degree">
+							<span id="forecast-day-degree-data-5">20</span
+							><span id="forecast-day-degree-weekday-5"
+								>Friday</span
+							>
+						</div>
+					</div>
+				</div>
 
-            <div id="graph">
-                <div id="graph_interface">
-                    <div>
-                        <button id="temperature-chart-button"><i
-                                class="fa-solid fa-temperature-three-quarters"></i></button>
-                    </div>
-                    <div>
-                        <button id="precipitation-chart-button"><i class="fa-solid fa-cloud-showers-heavy"></i></button>
-                    </div>
-                </div>
-                <div id="chart">
-                    <canvas id="chart-canvas"></canvas>
-                </div>
-            </div>
+				<div class="separator"></div>
 
-            <div class="separator"></div>
+				<div id="map"></div>
 
+				<div class="separator"></div>
 
-            <div id="additional-info">
-                <div class="additional-info-row">
-                    <div><i class="fa-solid fa-temperature-three-quarters"></i> Feels like: <span
-                            id="additional-info-feels-like">-30</span>&#176;</div>
-                    <div><i class="fa-solid fa-compress"></i> Pressure: <span
-                            id="additional-info-pressure">1025</span>hPa</div>
-                    <div><i class="fa-solid fa-cloud"></i> Clouds: <span id="additional-info-clouds">100</span>%</div>
-                </div>
-                <div class="additional-info-row">
-                    <div><i class="fa-solid fa-eye"></i> Visibility: <span
-                            id="additional-info-visibility">10000km</span>
-                    </div>
-                    <div><i class="fa-regular fa-sun"></i> Sunrise: <span id="additional-info-sunrise">06:00</span>
-                    </div>
-                    <div><i class="fa-solid fa-sun"></i> Sunset: <span id="additional-info-sunset">20:00</span></div>
-                </div>
-            </div>
+				<div id="footer">
+					<div id="footer-massage">2023&#169; rudy282</div>
+					<i class="fa-solid fa-gear" id="footer-button"></i>
+				</div>
+			</div>
+		</div>
 
+		<div id="popup">
+			<div id="popup-message">Test message</div>
+			<button id="popup-button">OK</button>
+		</div>
 
-            <div class="separator"></div>
+		<div id="settings-menu">
+			<div class="settings-menu-entry-wrapper">
+				<label for="settings-menu-api">API key:</label>
+				<div class="settings-menu-input-text-holder">
+					<input
+						type="text"
+						name="APIKey"
+						id="settings-menu-api"
+						class="settings-menu-input-text" />
+				</div>
+			</div>
+			<div class="settings-menu-entry-wrapper">
+				<label for="settings-menu-current-location"
+					>Set current location as default:</label
+				>
+				<input
+					type="checkbox"
+					name="current-location"
+					id="settings-menu-current-location" />
+			</div>
+			<div class="settings-menu-entry-wrapper">
+				<label for="settings-menu-starting-location"
+					>Starting location:</label
+				>
+				<div class="settings-menu-input-text-holder">
+					<input
+						type="text"
+						name="starting-location"
+						id="settings-menu-starting-location"
+						class="settings-menu-input-text" />
+				</div>
+			</div>
+			<button id="settings-menu-close">Close</button>
+		</div>
 
-            <div id="forecast">
-                <div class="forecast-day">
-                    <img src="#" id="forecast-day-img-1" class="forecast-day-img" alt="weather">
-                    <div id="forecast-day-degree-1" class="forecast-day-degree"><span
-                            id="forecast-day-degree-data-1">20</span><span
-                            id="forecast-day-degree-weekday-1">Monday</span>
-                    </div>
-                </div>
-                <div class="forecast-day">
-                    <img src="#" id="forecast-day-img-2" class="forecast-day-img" alt="weather">
-                    <div id="forecast-day-degree-1" class="forecast-day-degree"><span
-                            id="forecast-day-degree-data-2">20</span><span
-                            id="forecast-day-degree-weekday-2">Tuesday</span></div>
-                </div>
-                <div class="forecast-day">
-                    <img src="#" id="forecast-day-img-3" class="forecast-day-img" alt="weather">
-                    <div id="forecast-day-degree-1" class="forecast-day-degree"><span
-                            id="forecast-day-degree-data-3">20</span><span
-                            id="forecast-day-degree-weekday-3">Wednesday</span></div>
-                </div>
-                <div class="forecast-day">
-                    <img src="#" id="forecast-day-img-4" class="forecast-day-img" alt="weather">
-                    <div id="forecast-day-degree-1" class="forecast-day-degree"><span
-                            id="forecast-day-degree-data-4">20</span><span
-                            id="forecast-day-degree-weekday-4">Thursday</span></div>
-                </div>
-                <div class="forecast-day">
-                    <img src="#" id="forecast-day-img-5" class="forecast-day-img" alt="weather">
-                    <div id="forecast-day-degree-1" class="forecast-day-degree"><span
-                            id="forecast-day-degree-data-5">20</span><span
-                            id="forecast-day-degree-weekday-5">Friday</span></div>
-                </div>
-            </div>
-
-            <div class="separator"></div>
-
-            <div id="map"></div>
-
-            <div class="separator"></div>
-
-            <div id="footer">
-                <div id="footer-massage">
-                    2023&#169; rudy282
-                </div>
-                <i class="fa-solid fa-gear" id="footer-button"></i>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="popup">
-        <div id="popup-message">
-            Test message
-        </div>
-        <button id="popup-button">OK</button>
-    </div>
-
-    <div id="settings-menu">
-        <div class="settings-menu-entry-wrapper">
-            <label for="settings-menu-api">API key:</label>
-            <div class="settings-menu-input-text-holder">
-                <input type="text" name="APIKey" id="settings-menu-api" class="settings-menu-input-text">
-            </div>
-        </div>
-        <div class="settings-menu-entry-wrapper">
-            <label for="settings-menu-current-location">Set current location as default:</label>
-            <input type="checkbox" name="current-location" id="settings-menu-current-location">
-        </div>
-        <div class="settings-menu-entry-wrapper">
-            <label for="settings-menu-starting-location">Starting location:</label>
-            <div class="settings-menu-input-text-holder">
-                <input type="text" name="starting-location" id="settings-menu-starting-location"
-                    class="settings-menu-input-text">
-            </div>
-        </div>
-        <button id="settings-menu-close">Close</button>
-    </div>
-
-    <div id="load">
-        <div id="spinner"></div>
-    </div>
-
-</body>
-
+		<div id="load">
+			<div id="spinner"></div>
+		</div>
+	</body>
 </html>
