@@ -79,7 +79,9 @@ const checkIfExists = async (searchQuery, callback) => {
 		if (json.length !== 0) {
 			callback(searchQuery);
 		} else {
-			showPopup("This place does not exist, please change it");
+			showPopup(
+				"This place does not exist or cannot be accessed, please change it"
+			);
 		}
 	} catch (error) {
 		throw error;
